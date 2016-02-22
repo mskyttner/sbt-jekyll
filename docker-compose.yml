@@ -1,0 +1,30 @@
+fs.jekyll:
+  image: tianon/true
+  volumes:
+    - ./src:/src
+
+fs.sbt:
+  image: tianon/true
+  volumes:
+    - ./src/_site:/usr/share/nginx/html:rw
+    - ./nginx-conf:/etc/nginx/conf.d:rw
+    - ./nginx-certs:/etc/nginx/ssl:rw
+    - ./nginx-logs:/etc/nginx/logs:rw
+
+jekyll:
+  image: grahamc/jekyll:next
+  command: build --incremental -w
+  ports:
+    - "4000:4000"
+  volumes_from:
+    - fs.jekyll
+
+sbt:
+  image: nginx
+  ports:
+    - "80:80"
+    - "443:443"
+  volumes_from:
+    - fs.sbt
+
+
