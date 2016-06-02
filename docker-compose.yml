@@ -12,12 +12,10 @@ fs.sbt:
     - ./nginx-logs:/etc/nginx/logs:rw
 
 jekyll:
-  image: grahamc/jekyll:next
-  command: build --incremental -w
-  ports:
-    - "4000:4000"
-  volumes_from:
-    - fs.jekyll
+  image: jekyll/jekyll:3.1.3
+  command: bundle exec jekyll build --incremental --watch
+  volumes:
+    - ./src:/srv/jekyll
 
 sbt:
   image: nginx
